@@ -134,7 +134,7 @@
 			$response = $this->request('insertShipment', $shipment->toArray(), "POST");
 
 			if ($response->error !== null) {
-				throw new \Error('An error occurred when inserting a DPD shipment: ' . $response->error);
+				throw new \Error('An error occurred when inserting a DPD shipment: ' . var_export($response->error, true));
 			}
 
 			return $response->data;
