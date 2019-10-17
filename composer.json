@@ -1,0 +1,26 @@
+{
+    "name": "broken-titan/dpd",
+    "description": "Talks with the DPD api for easy shipping with their REST services.",
+    "keywords": ["dpd", "shipping", "api"],
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Marshall Miller",
+            "email": "contact@brokentitan.com"
+        }
+    ],
+    "type": "project",
+    "require": {
+		"php": ">=7.1",
+        "guzzlehttp/guzzle": "^6.3"
+    },
+    "require-dev": {
+		"phpunit/phpunit": "6.*"
+    },
+    "autoload": {
+        "psr-4": {
+            "BrokenTitan\\DPD\\": "src/"
+        }
+    },
+    "version": "0.1.0"
+}
