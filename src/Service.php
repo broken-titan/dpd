@@ -15,7 +15,7 @@
 		private $serviceCode;
 		private $serviceDescription;
 
-		public function __construct(string $networkCode, string $networkDescription, string $productCode, string $productDescription, string $serviceCode, string $serviceDescription) {
+		public function __construct(string $networkCode, string $networkDescription = "", string $productCode = "", string $productDescription = "", string $serviceCode = "", string $serviceDescription = "") {
 			$this->networkCode = $networkCode;
 			$this->networkDescription = $networkDescription;
 			$this->productCode = $productCode;
