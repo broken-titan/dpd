@@ -39,4 +39,44 @@
 				, "consignment" => [$this->consignment->toArray()]
 			];
 		}
+
+		/**
+		 * @method getConsignment
+		 * @return \BrokenTitan\DPD\Consignment
+		 */
+		public function getConsignment() : \BrokenTitan\DPD\Consignment {
+			return $this->consignment;
+		}
+
+		/**
+		 * @method getCollectionDetails
+		 * @return \BrokenTitan\DPD\CollectionDetails
+		 */
+		public function getCollectionDetails() : \BrokenTitan\DPD\CollectionDetails {
+			return $this->getConsignment()->getCollectionDetails();
+		}
+
+		/**
+		 * @method getDeliveryDetails
+		 * @return \BrokenTitan\DPD\DeliveryDetails
+		 */
+		public function getDeliveryDetails() : \BrokenTitan\DPD\DeliveryDetails {
+			return $this->getConsignment()->getDeliveryDetails();
+		}
+
+		/**
+		 * @method getNumberOfParcels
+		 * @return int
+		 */
+		public function getNumberOfParcels() : int {
+			return $this->getConsignment()->getNumberOfParcels();
+		}
+
+		/**
+		 * @method getWeight
+		 * @return float
+		 */
+		public function getTotalWeight() : float {
+			return $this->getConsignment()->getTotalWeight();
+		}
 	}

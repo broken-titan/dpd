@@ -27,13 +27,13 @@
 		private $shippersDestinationTaxId;
 		private $vatPaid;
 
-		public function __construct(\BrokenTitan\DPD\CollectionDetails $collectionDetails, \BrokenTitan\DPD\DeliveryDetails $deliveryDetails, array $parcels, bool $liability, ?string $liabilityValue, string $networkCode, string $parcelDescription, string $shippingRef1 = "", string $shippingRef2 = "", string $shippingRef3 = "", string $deliveryInstructions = "", string $shippersDestinationTaxId = "", string $vatPaid = "") {
+		public function __construct(\BrokenTitan\DPD\CollectionDetails $collectionDetails, \BrokenTitan\DPD\DeliveryDetails $deliveryDetails, array $parcels, bool $liability, ?string $liabilityValue, \BrokenTitan\DPD\Service $service, string $parcelDescription, string $shippingRef1 = "", string $shippingRef2 = "", string $shippingRef3 = "", string $deliveryInstructions = "", string $shippersDestinationTaxId = "", string $vatPaid = "") {
 			$this->collectionDetails = $collectionDetails;
 			$this->deliveryDetails = $deliveryDetails;
 			$this->deliveryInstructions = $deliveryInstructions;
 			$this->liability = $liability;
 			$this->liabilityValue = $liabilityValue;
-			$this->networkCode = $networkCode;
+			$this->networkCode = $service->getNetworkCode();
 			$this->parcelDescription = $parcelDescription;
 			$this->shippingRef1 = $shippingRef1;
 			$this->shippingRef2 = $shippingRef2;
@@ -85,5 +85,37 @@
 			$this->customsValue += number_format($parcel->getValue(), 2);
 
 			return $this;
+		}
+
+		/**
+		 * @method getCollectionDetails
+		 * @return \BrokenTitan\DPD\CollectionDetails
+		 */
+		public function getCollectionDetails() : \BrokenTitan\DPD\CollectionDetails {
+			return $this->collectionDetails;
+		}
+
+		/**
+		 * @method getDeliveryDetails
+		 * @return \BrokenTitan\DPD\DeliveryDetails
+		 */
+		public function getDeliveryDetails() : \BrokenTitan\DPD\DeliveryDetails {
+			return $this->deliveryDetails;
+		}
+
+		/**
+		 * @method getNumberOfParcels
+		 * @return float
+		 */
+		public function getNumberOfParcels() : float {
+			return $this->numberOfParcels;
+		}
+
+		/**
+		 * @method getTotalWeight
+		 * @return float
+		 */
+		public function getTotalWeight() : float {
+			return $this->totalWeight;
 		}
 	}

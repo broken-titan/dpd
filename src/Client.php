@@ -26,6 +26,7 @@
 			"login" => "/user/?action=login"
 			, "insertShipment" => "/shipping/shipment"
 			, "listCountries" => "/shipping/country"
+			, "listServices" => "/shipping/network"
 		];
 
 		/**
@@ -80,7 +81,7 @@
 		 * @param string type
 		 * @return bool
 		 */
-		private function request(string $action, array $body = [], string $type = "GET") : object {
+		private function request(string $action, array $body = [], string $type = "GET", string $query = "") : object {
 			$data = [
 				'auth' => [$this->user, $this->pass]
 			];
@@ -91,6 +92,10 @@
 
 			if (!empty($body)) {
 				$data['json'] = $body;
+			}
+
+			if (!empty($query)) {
+				$data['query'] = $query;
 			}
 
 			$response = $this->client->request($type, $this->url($action), $data);
@@ -148,5 +153,60 @@
 			$response = $this->request('listCountries');
 
 			return $response->data->country;
+		}
+
+		/**
+		 * @method listServices
+		 * @return array
+		 */
+		public function listServices(\BrokenTitan\DPD\CollectionDetails $collectionDetails, \BrokenTitan\DPD\DeliveryDetails $deliveryDetails, array $parcels, int $businessUnit = 0, int $deliveryDirection = 1, int $shipmentType = 1) : array {
+
+			$totalWeight = 0.0;
+			$numberOfParcels = 0;
+
+			foreach ($parcels as $parcel) {
+				$totalWeight += $parcel->getWeight();
+				$numberOfParcels++;
+			}
+
+			$data = array_merge([
+					'businessUnit' => $businessUnit
+					, 'deliveryDirection' => $deliveryDirection
+					, 'numberOfParcels' => $numberOfParcels
+					, 'shipmentType' => $shipmentType
+					, 'totalWeight' => $totalWeight
+				]
+				, $this->arrayFlat(["collectionDetails" => $collectionDetails->toArray()])
+				, $this->arrayFlat(["deliveryDetails" => $deliveryDetails->toArray()])
+			);
+			$data = http_build_query($data); 
+			$response = $this->request('listServices', [], "GET", $data);
+
+			$services = [];
+            foreach ($response->data as $service) {
+                $services[] = new \BrokenTitan\DPD\Service($service->network->networkCode, $service->network->networkDescription, $service->product->productCode, $service->product->productDescription, $service->service->serviceCode, $service->service->serviceDescription);
+            }
+
+			return $services;
+		}
+
+		/**
+		 * @method arrayFlat
+		 * @param array $array
+		 * @param string prefix
+		 * @return array
+		 */
+		private function arrayFlat(array $array, string $prefix = '') : array {
+		    $result = [];
+		    foreach ($array as $key => $value) {
+		        if (is_array($value)) {
+		            $result = array_merge($result, self::arrayFlat($value, $prefix . $key . '.'));
+		        }
+		        else {
+		            $result[$prefix . $key] = $value;
+		        }
+		    }
+
+		    return $result;
 		}
 	}
