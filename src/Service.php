@@ -33,6 +33,14 @@
 		}
 
 		/**
+		 * @method getNetworkDescription
+		 * @return string
+		 */
+		public function getNetworkDescription() : string {
+			return $this->networkDescription;
+		}
+
+		/**
 		 * @method toArray
 		 * @return array
 		 */
