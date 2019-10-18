@@ -182,6 +182,10 @@
 			$data = http_build_query($data); 
 			$response = $this->request('listServices', [], "GET", $data);
 
+			if (!empty($response->error)) {
+				throw new \Error("An error occurred when listing DPD services: " . var_export($response->error, true));
+			}
+
 			$services = [];
             foreach ($response->data as $service) {
                 $services[] = new \BrokenTitan\DPD\Service($service->network->networkCode, $service->network->networkDescription, $service->product->productCode, $service->product->productDescription, $service->service->serviceCode, $service->service->serviceDescription);

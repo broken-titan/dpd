@@ -41,6 +41,14 @@
 		}
 
 		/**
+		 * @method getProductDescription
+		 * @return string
+		 */
+		public function getProductDescription() : string {
+			return $this->productDescription;
+		}
+
+		/**
 		 * @method toArray
 		 * @return array
 		 */
