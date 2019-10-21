@@ -27,6 +27,7 @@
 			, "insertShipment" => "/shipping/shipment"
 			, "listCountries" => "/shipping/country"
 			, "listServices" => "/shipping/network"
+			, "getLabel" => "/shipping/shipment/{shipmentId}/label"
 		];
 
 		/**
@@ -51,10 +52,19 @@
 		/**
 		 * @method url
 		 * @param string action
+		 * @param array body
 		 * @return string
 		 */
-		private function url(string $action) : string {
-			return $this->url . $this->actions[$action] . ($this->test ? '?test=true' : '');
+		private function url(string $action, array $urlReplacements = []) : string {
+			$url = $this->url . $this->actions[$action] . ($this->test ? '?test=true' : '');
+
+			if (!empty($urlReplacements)) {
+				foreach ($urlReplacements as $subject => $replace) {
+					$url = str_ireplace("{" . $subject . "}", $replace, $url);
+				}
+			}
+
+			return $url; 
 		}
 
 		/**
@@ -81,13 +91,17 @@
 		 * @param string type
 		 * @return bool
 		 */
-		private function request(string $action, array $body = [], string $type = "GET", string $query = "") : object {
+		private function request(string $action, array $body = [], string $type = "GET", string $query = "", array $additionalHeaders = [], array $urlReplacements = []) : object {
 			$data = [
 				'auth' => [$this->user, $this->pass]
 			];
 
 			if (!empty($this->headers)) {
 				$data['headers'] = $this->headers;
+			}
+
+			if (!empty($additionalHeaders)) {
+				$data['headers'] = array_merge($this->headers, $additionalHeaders);
 			}
 
 			if (!empty($body)) {
@@ -98,14 +112,19 @@
 				$data['query'] = $query;
 			}
 
-			$response = $this->client->request($type, $this->url($action), $data);
+			$response = $this->client->request($type, $this->url($action, $urlReplacements), $data);
 
 			if ($response->getStatusCode() != 200) {
 				throw new \Error('An error occurred when making a request to the DPD API service: ' . $response->getStatusCode() . ' ' . $response->getReasonPhrase());
 			}
 
-			$body = (string)$response->getBody();
-			$body = json_decode($body);
+			$contentHeader = $response->getHeader("Content-Type");
+			$contentHeader = reset($contentHeader);
+			if (stripos($contentHeader, "application/json") !== false) {
+				$body = json_decode((string)$response->getBody());
+			} else {
+				$body = (object)(string)$response->getBody();
+			}
 
 			return $body;
 		}
@@ -192,6 +211,42 @@
             }
 
 			return $services;
+		}
+
+		/**
+		 * @method getLabel
+		 * @param string shipmentId
+		 * @param string type html, clp, or epl
+		 * @return string
+		 */
+		public function getLabel(string $shipmentId, string $type = "html") {
+			$validTypes = ["html", "clp", "epl"];
+
+			if (!in_array($type, $validTypes)) {
+				throw new \Error("An error occurred when retrieving a DPD label for shipment $shipmentId: $type is not a valid label type.");
+			}
+
+			switch ($type) {
+				case "html":
+					$type = "text/html";
+					break;
+
+				case "clp":
+					$type = "text/vnd.citizen-clp";
+					break;
+
+				case "epl":
+					$type = "text/vnd.eltron-epl";
+					break;
+			}
+
+			$response = $this->request("getLabel", [], "GET", "", ["Accept" => $type], ["shipmentId" => $shipmentId]);
+
+			if (!isset($response->scalar)) {
+				throw new \Error("An error occurred when getting a DPD label: no label returned for shipment ID {$shipmentId}.");
+			}
+
+			return $response->scalar;
 		}
 
 		/**
