@@ -41,4 +41,12 @@
 				, "county" => $this->county
 			];
 		}
+
+		/**
+		 * @method getCountry
+		 * @return string
+		 */
+		public function getCountry() : string {
+			return $this->countryCode;
+		}
 	}

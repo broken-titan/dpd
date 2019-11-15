@@ -25,6 +25,7 @@
 		private $actions = [
 			"login" => "/user/?action=login"
 			, "insertShipment" => "/shipping/shipment"
+			, "insertBrexitShipment" => "/brexit/shipping/shipment"
 			, "listCountries" => "/shipping/country"
 			, "listServices" => "/shipping/network"
 			, "getLabel" => "/shipping/shipment/{shipmentId}/label"
@@ -159,6 +160,21 @@
 
 			if ($response->error !== null) {
 				throw new \Error('An error occurred when inserting a DPD shipment: ' . var_export($response->error, true));
+			}
+
+			return $response->data;
+		}
+
+		/**
+		 * @method insertBrexitShipment
+		 * @param BrokenTitan\DPD\Shipment shipment
+		 * @return bool
+		 */
+		public function insertBrexitShipment(\BrokenTitan\DPD\Shipment $shipment) : \stdClass {
+			$response = $this->request('insertBrexitShipment', $shipment->toArray(), "POST");
+
+			if ($response->error !== null) {
+				throw new \Error('An error occurred when inserting a DPD Brexit shipment: ' . var_export($response->error, true));
 			}
 
 			return $response->data;

@@ -22,7 +22,7 @@
 		public function __construct(string $countryOfOrigin, int $numberOfItems, string $productHarmonisedCode, string $productItemsDescription, float $unitValue, float $unitWeight, string $productCode = "", string $productFabricContent = "", string $productTypeDescription = "", string $productUrl = "") {
 			$this->countryOfOrigin = $countryOfOrigin;
 			$this->numberOfItems = $numberOfItems;
-			$this->productHarmonisedCode = $productHarmonisedCode;
+			$this->productHarmonisedCode = substr(preg_replace("/[^0-9]/", "", $productHarmonisedCode), 0, 8);
 			$this->productItemsDescription = $productItemsDescription;
 			$this->unitValue = $unitValue;
 			$this->unitWeight = $unitWeight;
@@ -42,7 +42,7 @@
 				, "numberOfItems" => $this->numberOfItems
 				, "productCode" => $this->productCode
 				, "productFabricContent" => $this->productFabricContent
-				, "productHarmonisedCode" => preg_replace("/[^0-9]/", "", $this->productHarmonisedCode)
+				, "productHarmonisedCode" => $this->productHarmonisedCode
 				, "productItemsDescription" => $this->productItemsDescription
 				, "productTypeDescription" => $this->productTypeDescription
 				, "unitValue" => $this->unitValue

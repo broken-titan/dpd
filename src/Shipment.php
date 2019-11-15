@@ -15,6 +15,7 @@
 		private $invoice;
 		private $jobId = null;
 		private $generateCustomsData = "Y";
+		private $domestic;
 
 		public function __construct(\BrokenTitan\DPD\Consignment $consignment, \BrokenTitan\DPD\Invoice $invoice, ?\DateTime $collectionDate = null, bool $consolidate = false, bool $collectionOnDelivery = false) {
 			$this->consignment = $consignment;
@@ -22,6 +23,7 @@
 			$this->collectionDate = $collectionDate;
 			$this->consolidate = $consolidate;
 			$this->collectionOnDelivery = $collectionOnDelivery;
+			$this->domestic = $consignment->isDomestic();
 		}
 
 		/**
@@ -29,15 +31,29 @@
 		 * @return array
 		 */
 		public function toArray() : array {
-			return [
-				"jobId" => $this->jobId
-				, "collectionOnDelivery" => $this->collectionOnDelivery
-				, "generateCustomsData" => $this->generateCustomsData
-				, "invoice" => $this->invoice->toArray()
-				, "collectionDate" => $this->collectionDate ? $this->collectionDate->format("Y-m-d\TH:i:s") : null
-				, "consolidate" => $this->consolidate
-				, "consignment" => [$this->consignment->toArray()]
-			];
+			if ($this->domestic) {
+				$array = [
+					"jobId" => null
+					, "collectionOnDelivery" => $this->collectionOnDelivery
+					, "generateCustomsData" => "N"
+					, "invoice" => null
+					, "collectionDate" => $this->collectionDate ? $this->collectionDate->format("Y-m-d\TH:i:s") : null
+					, "consolidate" => $this->consolidate
+					, "consignment" => [$this->consignment->toArray()]
+				];
+			} else {
+				$array = [
+					"jobId" => $this->jobId
+					, "collectionOnDelivery" => $this->collectionOnDelivery
+					, "generateCustomsData" => $this->generateCustomsData
+					, "invoice" => $this->invoice->toArray()
+					, "collectionDate" => $this->collectionDate ? $this->collectionDate->format("Y-m-d\TH:i:s") : null
+					, "consolidate" => $this->consolidate
+					, "consignment" => [$this->consignment->toArray()]
+				];
+			}
+
+			return $array;
 		}
 
 		/**

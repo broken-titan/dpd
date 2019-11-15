@@ -26,4 +26,12 @@
 				, "contactDetails" => $this->contactDetails->toArray()
 			];
 		}
+
+		/**
+		 * @method getCountry
+		 * @return string
+		 */
+		public function getCountry() : string {
+			return $this->address->getCountry();
+		}
 	}

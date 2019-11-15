@@ -26,6 +26,7 @@
 		private $totalWeight;
 		private $shippersDestinationTaxId;
 		private $vatPaid;
+		private $domestic = false;
 
 		public function __construct(\BrokenTitan\DPD\CollectionDetails $collectionDetails, \BrokenTitan\DPD\DeliveryDetails $deliveryDetails, array $parcels, bool $liability, ?string $liabilityValue, \BrokenTitan\DPD\Service $service, string $parcelDescription, string $shippingRef1 = "", string $shippingRef2 = "", string $shippingRef3 = "", string $deliveryInstructions = "", string $shippersDestinationTaxId = "", string $vatPaid = "") {
 			$this->collectionDetails = $collectionDetails;
@@ -44,6 +45,10 @@
 			foreach ($parcels as $parcel) {
 				$this->addParcel($parcel);
 			}
+
+			if (strtolower($collectionDetails->getCountry()) == strtolower($deliveryDetails->getCountry())) {
+				$this->domestic = true;
+			}
 		}
 
 		/**
@@ -51,26 +56,49 @@
 		 * @return array
 		 */
 		public function toArray() : array {
-			return [
-				"consignmentNumber" => $this->consignmentNumber
-				, "consignmentRef" => $this->consignmentRef
-				, "parcel" => array_map(function($parcel) { return $parcel->toArray(); }, $this->parcels)
-				, "collectionDetails" => $this->collectionDetails->toArray()
-				, "deliveryDetails" => $this->deliveryDetails->toArray()
-				, "networkCode" => $this->networkCode
-				, "numberOfParcels" => $this->numberOfParcels
-				, "totalWeight" => $this->totalWeight
-				, "shippingRef1" => $this->shippingRef1
-				, "shippingRef2" => $this->shippingRef2
-				, "shippingRef3" => $this->shippingRef3
-				, "customsValue" => $this->customsValue
-				, "deliveryInstructions" => $this->deliveryInstructions
-				, "parcelDescription" => $this->parcelDescription
-				, "liabilityValue" => $this->liabilityValue
-				, "liability" => $this->liability
-				, "shippersDestinationTaxId" => $this->shippersDestinationTaxId
-				, "vatPaid" => $this->vatPaid
-			];
+			if ($this->domestic) {
+				$array = [
+					"consignmentNumber" => $this->consignmentNumber
+					, "consignmentRef" => $this->consignmentRef
+					, "parcel" => []
+					, "collectionDetails" => $this->collectionDetails->toArray()
+					, "deliveryDetails" => $this->deliveryDetails->toArray()
+					, "networkCode" => $this->networkCode
+					, "numberOfParcels" => $this->numberOfParcels
+					, "totalWeight" => $this->totalWeight
+					, "shippingRef1" => $this->shippingRef1
+					, "shippingRef2" => $this->shippingRef2
+					, "shippingRef3" => $this->shippingRef3
+					, "customsValue" => null
+					, "deliveryInstructions" => $this->deliveryInstructions
+					, "parcelDescription" => $this->parcelDescription
+					, "liabilityValue" => $this->liabilityValue
+					, "liability" => $this->liability
+				];
+			} else {
+				$array = [
+					"consignmentNumber" => $this->consignmentNumber
+					, "consignmentRef" => $this->consignmentRef
+					, "parcel" => array_map(function($parcel) { return $parcel->toArray(); }, $this->parcels)
+					, "collectionDetails" => $this->collectionDetails->toArray()
+					, "deliveryDetails" => $this->deliveryDetails->toArray()
+					, "networkCode" => $this->networkCode
+					, "numberOfParcels" => $this->numberOfParcels
+					, "totalWeight" => $this->totalWeight
+					, "shippingRef1" => $this->shippingRef1
+					, "shippingRef2" => $this->shippingRef2
+					, "shippingRef3" => $this->shippingRef3
+					, "customsValue" => $this->customsValue
+					, "deliveryInstructions" => $this->deliveryInstructions
+					, "parcelDescription" => $this->parcelDescription
+					, "liabilityValue" => $this->liabilityValue
+					, "liability" => $this->liability
+					, "shippersDestinationTaxId" => $this->shippersDestinationTaxId
+					, "vatPaid" => $this->vatPaid
+				];
+			}
+
+			return $array;
 		}
 
 		/**
@@ -117,5 +145,13 @@
 		 */
 		public function getTotalWeight() : float {
 			return $this->totalWeight;
+		}
+
+		/**
+		 * @method isDomestic
+		 * @return bool
+		 */
+		public function isDomestic() : bool {
+			return $this->domestic;
 		}
 	}
