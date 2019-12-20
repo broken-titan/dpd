@@ -158,8 +158,12 @@
 		public function insertShipment(\BrokenTitan\DPD\Shipment $shipment) : \stdClass {
 			$response = $this->request('insertShipment', $shipment->toArray(), "POST");
 
-			if ($response->error !== null) {
-				throw new \Error('An error occurred when inserting a DPD shipment: ' . var_export($response->error, true));
+			$exception = null;
+			if (!empty($response->error)) {
+				foreach ($response->error as $error) {
+					$exception = new ShipmentError($error->errorMessage, $error->errorCode, $error->obj, $error->errorType, $error->errorAction, $exception);
+				}
+				throw $exception;
 			}
 
 			return $response->data;
