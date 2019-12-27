@@ -51,7 +51,7 @@
 		 * @return float
 		 */
 		public function getWeight() : float {
-			return $this->weight;
+			return max($this->weight, 0.1); //parcel must be at least 0.1 in weight.
 		}
 
 		/**

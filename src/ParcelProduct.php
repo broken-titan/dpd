@@ -25,7 +25,7 @@
 			$this->productHarmonisedCode = substr(preg_replace("/[^0-9]/", "", $productHarmonisedCode), 0, 8);
 			$this->productItemsDescription = $productItemsDescription;
 			$this->unitValue = $unitValue;
-			$this->unitWeight = $unitWeight;
+			$this->unitWeight = max($unitWeight, 0.01); //weight must be 0.01 at minimum.
 			$this->productCode = $productCode;
 			$this->productFabricContent = $productFabricContent;
 			$this->productTypeDescription = $productTypeDescription;
