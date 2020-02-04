@@ -25,9 +25,9 @@
 			$this->postcode = $postcode;
 			$this->county = $county;
 
-			foreach (["organisation", "street", "locality", "town", "postcode", "county"] as $property) {
+			/*foreach (["organisation", "street", "locality", "town", "postcode", "county"] as $property) {
 				$this->{$property} = mb_convert_encoding($this->{$property}, "ISO-8859-1", mb_detect_encoding($this->{$property}));
-			}
+			}*/
 		}
 
 		/**
