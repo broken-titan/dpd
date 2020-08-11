@@ -42,6 +42,12 @@
 
 			$this->weight += $product->getTotalWeight();
 			$this->value += $product->getTotalValue();
+			
+			$this->weight = number_format($this->weight, 2);
+			$this->value = number_format($this->value, 2);
+
+			$this->weight = floatval($this->weight);
+			$this->value = floatval($this->value);
 
 			return $this;
 		}
