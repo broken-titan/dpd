@@ -34,6 +34,7 @@
 			$this->shippingCost = $shippingCost;
 			$this->invoiceShipperDetails = $invoiceShipperDetails;
 			$this->invoiceDeliveryDetails = $invoiceDeliveryDetails;
+			$this->invoiceTermsOfDelivery = $invoiceTermsOfDelivery;
 		}
 
 		/**
