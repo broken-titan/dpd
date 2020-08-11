@@ -23,8 +23,9 @@
 		private $invoiceReference;
 		private $shippingCost;
 		private $invoiceDeliveryDetails;
+		private $invoiceTermsOfDelivery;
 
-		public function __construct(\BrokenTitan\DPD\InvoiceShipperDetails $invoiceShipperDetails, \BrokenTitan\DPD\InvoiceDeliveryDetails $invoiceDeliveryDetails, string $countryOfOrigin, string $invoiceExportReason, int $invoiceType, string $invoiceCustomsNumber = "", string $invoiceReference = "", float $shippingCost = 0.00) {
+		public function __construct(\BrokenTitan\DPD\InvoiceShipperDetails $invoiceShipperDetails, \BrokenTitan\DPD\InvoiceDeliveryDetails $invoiceDeliveryDetails, string $countryOfOrigin, string $invoiceExportReason, int $invoiceType, string $invoiceCustomsNumber = "", string $invoiceReference = "", float $shippingCost = 0.00, string $invoiceTermsOfDelivery = "DAP") {
 			$this->countryOfOrigin = $countryOfOrigin;
 			$this->invoiceCustomsNumber = $invoiceCustomsNumber;
 			$this->invoiceExportReason = $invoiceExportReason;
@@ -49,6 +50,7 @@
 				, "shippingCost" => $this->shippingCost
 				, "invoiceShipperDetails" => $this->invoiceShipperDetails->toArray()
 				, "invoiceDeliveryDetails" => $this->invoiceDeliveryDetails->toArray()
+				, "invoiceTermsOfDelivery" => $this->invoiceTermsOfDelivery
 			], function ($value) { return !is_string($value) || strlen($value) > 0; });
 		}
 	}
