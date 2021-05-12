@@ -11,8 +11,7 @@
     ],
     "type": "project",
     "require": {
-		"php": ">=7.1",
-        "guzzlehttp/guzzle": "^6.3",
+        "guzzlehttp/guzzle": "7.3.0",
         "ext-mbstring": "*"
     },
     "require-dev": {
