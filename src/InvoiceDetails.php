@@ -10,10 +10,12 @@
 	abstract class InvoiceDetails {
 		private $address;
 		private $contactDetails;
-		private $vatNumber;
+		private $valueAddedTaxNumber;
 
-		public function __construct(string $vatNumber, ?\BrokenTitan\DPD\Address $address = null, ?\BrokenTitan\DPD\ContactDetails $contactDetails = null) {
-			$this->vatNumber = $vatNumber;
+		public function __construct(?string $eoriNumber = null, ?string $valueAddedTaxNumber = null, ?string $pidNumber = null, ?\BrokenTitan\DPD\Address $address = null, ?\BrokenTitan\DPD\ContactDetails $contactDetails = null) {
+			$this->valueAddedTaxNumber = $valueAddedTaxNumber;
+			$this->eoriNumber = $eoriNumber;
+			$this->pidNumber = $pidNumber;
 			$this->address = $address;
 			$this->contactDetails = $contactDetails;
 		}
@@ -26,7 +28,9 @@
 			return array_filter([
 				"address" => $this->address ? $this->address->toArray() : null
 				, "contactDetails" => $this->contactDetails ? $this->contactDetails->toArray() : null
-				, "vatNumber" => $this->vatNumber
+				, "valueAddedTaxNumber" => $this->valueAddedTaxNumber
+				, "eoriNumber" => $this->eoriNumber
+				, "pidNumber" => $this->pidNumber
 			]);
 		}
 	}
