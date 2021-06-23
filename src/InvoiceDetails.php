@@ -11,6 +11,8 @@
 		private $address;
 		private $contactDetails;
 		private $valueAddedTaxNumber;
+		private $eoriNumber;
+		private $pidNumber;
 
 		public function __construct(?string $eoriNumber = null, ?string $valueAddedTaxNumber = null, ?string $pidNumber = null, ?\BrokenTitan\DPD\Address $address = null, ?\BrokenTitan\DPD\ContactDetails $contactDetails = null) {
 			$this->valueAddedTaxNumber = $valueAddedTaxNumber;
