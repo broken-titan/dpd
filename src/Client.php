@@ -57,7 +57,8 @@
 		 * @return string
 		 */
 		private function url(string $action, array $urlReplacements = []) : string {
-			$url = $this->url . $this->actions[$action] . ($this->test ? '?test=true' : '');
+			$testing = (($this->test && $action != "login") ? '?test=true' : '');
+			$url = $this->url . $this->actions[$action] . $testing;
 
 			if (!empty($urlReplacements)) {
 				foreach ($urlReplacements as $subject => $replace) {
