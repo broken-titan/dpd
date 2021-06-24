@@ -14,7 +14,7 @@
 		private $eoriNumber;
 		private $pidNumber;
 
-		public function __construct(?string $eoriNumber = null, ?string $valueAddedTaxNumber = null, ?string $pidNumber = null, ?\BrokenTitan\DPD\Address $address = null, ?\BrokenTitan\DPD\ContactDetails $contactDetails = null) {
+		public function __construct(string $valueAddedTaxNumber = "", string $eoriNumber = "", string $pidNumber = "", ?\BrokenTitan\DPD\Address $address = null, ?\BrokenTitan\DPD\ContactDetails $contactDetails = null) {
 			$this->valueAddedTaxNumber = $valueAddedTaxNumber;
 			$this->eoriNumber = $eoriNumber;
 			$this->pidNumber = $pidNumber;
