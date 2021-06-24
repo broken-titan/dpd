@@ -33,6 +33,6 @@
 				, "valueAddedTaxNumber" => $this->valueAddedTaxNumber
 				, "eoriNumber" => $this->eoriNumber
 				, "pidNumber" => $this->pidNumber
-			], fn($item) => $item === null);
+			], fn($item) => $item !== null);
 		}
 	}
