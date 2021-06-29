@@ -8,8 +8,8 @@
 	* @author Marshall Miller
 	*/
 	class CollectionDetails {
-		private $address;
-		private $contactDetails;
+		public $address;
+		public $contactDetails;
 
 		public function __construct(\BrokenTitan\DPD\Address $address, \BrokenTitan\DPD\ContactDetails $contactDetails) {
 			$this->address = $address;
