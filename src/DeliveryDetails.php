@@ -8,9 +8,9 @@
 	* @author Marshall Miller
 	*/
 	class DeliveryDetails {
-		private $address;
-		private $contactDetails;
-		private $notificationDetails;
+		public $address;
+		public $contactDetails;
+		public $notificationDetails;
 
 		public function __construct(\BrokenTitan\DPD\Address $address, \BrokenTitan\DPD\ContactDetails $contactDetails, \BrokenTitan\DPD\NotificationDetails $notificationDetails) {
 			$this->address = $address;
