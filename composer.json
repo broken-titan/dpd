@@ -11,7 +11,7 @@
     ],
     "type": "project",
     "require": {
-        "guzzlehttp/guzzle": "6.5.7",
+        "guzzlehttp/guzzle": "^7.4.4",
         "ext-mbstring": "*"
     },
     "require-dev": {
